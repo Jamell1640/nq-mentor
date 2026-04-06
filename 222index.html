@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NQ Mentor">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#060a12">
+<title>NQ Mentor</title>
+<link id="manifest-link" rel="manifest">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23060a12'/%3E%3Ccircle cx='256' cy='256' r='200' fill='none' stroke='%2300c6ff' stroke-width='16'/%3E%3Ctext x='256' y='300' font-family='monospace' font-size='160' font-weight='bold' fill='%2300c6ff' text-anchor='middle'%3ENQ%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#060a12; --bg2:#0b1120; --surface:#0f1829; --surface2:#162035; --surface3:#1c2a42;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+  --accent:#00c6ff; --accent2:#0072ff; --glow:rgba(0,198,255,0.15);
+  --green:#00e676; --green-bg:rgba(0,230,118,0.1);
+  --red:#ff4057; --red-bg:rgba(255,64,87,0.1);
+  --yellow:#ffc400; --yellow-bg:rgba(255,196,0,0.1);
+  --orange:#ff6d00;
+  --text:#e2eaf5; --text2:#8899b4; --text3:#4d6080; --white:#ffffff;
+  --radius:12px; --radius-sm:8px;
+  --safe-top:env(safe-area-inset-top,0px); --safe-bottom:env(safe-area-inset-bottom,0px);
+  --font:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html,body{height:100%;height:-webkit-fill-available;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased}
+body{display:flex;flex-direction:column;padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 20% 0%,rgba(0,114,255,0.08),transparent 60%),radial-gradient(ellipse 50% 50% at 80% 100%,rgba(0,198,255,0.06),transparent 60%);pointer-events:none;z-index:0}
+
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(6,10,18,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;z-index:10;min-height:58px}
+.logo{display:flex;align-items:center;gap:11px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px rgba(0,198,255,0.3);position:relative;overflow:hidden}
+.logo-mark::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent)}
+.logo-mark span{font-family:var(--mono);font-size:11px;font-weight:600;color:white;letter-spacing:0.5px;position:relative;z-index:1}
+.logo-name{font-size:15px;font-weight:700;color:var(--white);line-height:1}
+.logo-sub{font-size:10px;color:var(--text3);letter-spacing:0.5px;margin-top:2px;font-family:var(--mono)}
+.header-right{display:flex;align-items:center;gap:10px}
+.session-pill{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:0.5px;font-family:var(--mono);transition:all 0.3s}
+.session-pill.active{background:var(--green-bg);color:var(--green);box-shadow:0 0 12px rgba(0,230,118,0.15)}
+.session-pill.waiting{background:var(--yellow-bg);color:var(--yellow)}
+.session-pill.closed{background:rgba(255,255,255,0.04);color:var(--text3)}
+.session-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.session-pill.active .session-dot{animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.et-time{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent);letter-spacing:1px}
+
+/* MODE TABS */
+.mode-tabs{display:flex;background:rgba(6,10,18,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;z-index:9;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
+.mode-tabs::-webkit-scrollbar{display:none}
+.mode-tab{flex:1;min-width:75px;padding:10px 8px 9px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;transition:all 0.2s}
+.mode-tab-icon{font-size:17px;line-height:1}
+.mode-tab-label{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.mode-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.mode-tab:active{background:rgba(255,255,255,0.03)}
+
+/* MAIN */
+.main{display:flex;flex:1;overflow:hidden;position:relative;z-index:1}
+
+/* SIDEBAR */
+.sidebar{width:260px;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;padding:16px 14px;display:flex;flex-direction:column;gap:16px;transition:transform 0.28s cubic-bezier(.4,0,.2,1)}
+@media(max-width:700px){
+  .sidebar{position:absolute;left:0;top:0;bottom:0;z-index:50;width:280px;transform:translateX(-100%);box-shadow:8px 0 32px rgba(0,0,0,0.6)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.6);z-index:49;backdrop-filter:blur(2px)}
+  .sidebar-overlay.open{display:block}
+}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px}
+.sidebar-section{display:flex;flex-direction:column;gap:8px}
+.sidebar-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.ctx-field{display:flex;flex-direction:column;gap:4px}
+.ctx-field label{font-size:10px;font-weight:500;color:var(--text2)}
+.ctx-field input,.ctx-field select,.ctx-field textarea{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:var(--mono);font-size:12px;padding:9px 11px;outline:none;transition:border-color 0.15s,box-shadow 0.15s;-webkit-appearance:none}
+.ctx-field input:focus,.ctx-field select:focus,.ctx-field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,198,255,0.1)}
+.ctx-field select option{background:var(--bg2)}
+.ctx-field textarea{resize:none;min-height:60px;font-size:11px;line-height:1.5}
+.bias-row{display:flex;gap:6px}
+.bias-btn{flex:1;padding:10px 4px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--border2);background:var(--bg2);color:var(--text3);border-radius:var(--radius-sm);transition:all 0.2s;font-family:var(--font)}
+.bias-btn.long.active{background:var(--green-bg);border-color:var(--green);color:var(--green);box-shadow:0 0 12px rgba(0,230,118,0.15)}
+.bias-btn.flat.active{background:rgba(0,198,255,0.08);border-color:var(--accent);color:var(--accent);box-shadow:0 0 12px var(--glow)}
+.bias-btn.short.active{background:var(--red-bg);border-color:var(--red);color:var(--red);box-shadow:0 0 12px rgba(255,64,87,0.15)}
+.level-row{display:flex;gap:6px;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 8px;margin-bottom:5px}
+.level-row select{flex:0 0 72px;font-size:10px;padding:4px;background:transparent;border:none;color:var(--text2);font-family:var(--mono);outline:none}
+.level-row input{flex:1;font-size:12px;padding:4px;background:transparent;border:none;color:var(--text);font-family:var(--mono);outline:none;min-width:0}
+.level-row button{background:none;border:none;color:var(--text3);font-size:14px;cursor:pointer;padding:2px 4px;line-height:1;transition:color 0.15s;flex-shrink:0}
+.level-row button:hover{color:var(--red)}
+.add-level-btn{width:100%;padding:9px;font-size:11px;font-weight:500;background:none;border:1.5px dashed var(--border2);color:var(--text3);cursor:pointer;font-family:var(--font);border-radius:var(--radius-sm);transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.add-level-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* CHAT */
+.chat-area{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;min-width:0}
+.sidebar-toggle{display:none;position:absolute;top:12px;left:12px;z-index:10;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);width:36px;height:36px;border-radius:10px;font-size:15px;cursor:pointer;align-items:center;justify-content:center;transition:all 0.15s}
+@media(max-width:700px){.sidebar-toggle{display:flex}}
+.messages{flex:1;overflow-y:auto;padding:16px 14px;padding-top:60px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
+@media(min-width:701px){.messages{padding-top:16px}}
+.messages::-webkit-scrollbar{width:3px}
+.messages::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px}
+.msg{display:flex;gap:10px;animation:msgIn 0.25s ease;max-width:100%}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{flex-direction:row-reverse}
+.msg-avatar{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:2px}
+.msg.mentor .msg-avatar{background:linear-gradient(135deg,var(--accent2),var(--accent));color:white;box-shadow:0 4px 12px rgba(0,198,255,0.25)}
+.msg.user .msg-avatar{background:var(--surface3);color:var(--text2)}
+.msg-content{max-width:calc(100% - 50px);display:flex;flex-direction:column;gap:4px}
+.msg-bubble{padding:12px 15px;border-radius:14px;font-size:13px;line-height:1.7;position:relative}
+.msg.mentor .msg-bubble{background:var(--surface);border:1px solid var(--border2);border-radius:4px 14px 14px 14px;color:var(--text)}
+.msg.user .msg-bubble{background:linear-gradient(135deg,var(--accent2),var(--accent));color:white;border-radius:14px 4px 14px 14px;box-shadow:0 4px 16px rgba(0,114,255,0.25)}
+.msg-bubble strong{color:var(--accent);font-weight:600}
+.msg.user .msg-bubble strong{color:rgba(255,255,255,0.9)}
+.tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:0.5px;font-family:var(--mono);margin:0 2px}
+.tag.bull{background:var(--green-bg);color:var(--green)}
+.tag.bear{background:var(--red-bg);color:var(--red)}
+.tag.neutral{background:rgba(0,198,255,0.1);color:var(--accent)}
+.tag.warn{background:rgba(255,109,0,0.12);color:var(--orange)}
+.msg-img{max-width:240px;border-radius:10px;display:block;margin-top:8px;border:1px solid var(--border2)}
+.msg-time{font-size:9px;color:var(--text3);font-family:var(--mono);padding:0 4px}
+.msg.user .msg-time{text-align:right}
+.typing-bubble{display:flex;align-items:center;gap:5px;padding:14px 16px}
+.typing-bubble span{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:0.6;animation:typeBounce 1.2s infinite}
+.typing-bubble span:nth-child(2){animation-delay:0.15s}
+.typing-bubble span:nth-child(3){animation-delay:0.3s}
+@keyframes typeBounce{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-5px);opacity:1}}
+.analyzing-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:4px}
+
+/* INPUT */
+.input-area{border-top:1px solid var(--border);background:rgba(6,10,18,0.95);backdrop-filter:blur(20px);padding:10px 12px 12px;flex-shrink:0;position:relative;z-index:5}
+.img-strip{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.img-thumb{position:relative;width:58px;height:46px;border-radius:var(--radius-sm);overflow:hidden;border:1.5px solid var(--accent)}
+.img-thumb img{width:100%;height:100%;object-fit:cover}
+.img-thumb-rm{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,0.8);color:white;border:none;cursor:pointer;font-size:9px;display:flex;align-items:center;justify-content:center}
+.chips{display:flex;gap:6px;flex-wrap:nowrap;margin-bottom:8px;overflow-x:auto;padding-bottom:2px;-ms-overflow-style:none;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:6px 12px;border-radius:20px;border:1px solid var(--border2);font-size:11px;font-weight:500;color:var(--text2);cursor:pointer;white-space:nowrap;background:var(--surface2);transition:all 0.15s;font-family:var(--font);flex-shrink:0}
+.chip:active{background:rgba(0,198,255,0.1);border-color:var(--accent);color:var(--accent)}
+.input-row{display:flex;gap:8px;align-items:flex-end}
+.img-btn{width:44px;height:44px;flex-shrink:0;background:var(--surface2);border:1.5px solid var(--border2);border-radius:12px;color:var(--text2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.img-btn:active{border-color:var(--accent);color:var(--accent);background:rgba(0,198,255,0.08)}
+#user-input{flex:1;background:var(--surface2);border:1.5px solid var(--border2);border-radius:12px;color:var(--text);font-family:var(--font);font-size:14px;padding:11px 14px;outline:none;resize:none;max-height:110px;min-height:44px;line-height:1.5;transition:border-color 0.15s,box-shadow 0.15s}
+#user-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,198,255,0.1)}
+#user-input::placeholder{color:var(--text3)}
+.send-btn{width:44px;height:44px;flex-shrink:0;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:12px;color:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,198,255,0.3);transition:all 0.15s}
+.send-btn:active{transform:scale(0.93);box-shadow:none}
+.send-btn:disabled{background:var(--surface3);box-shadow:none;cursor:not-allowed}
+
+/* INSTALL BANNER */
+#install-banner{display:none;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:linear-gradient(90deg,rgba(0,114,255,0.15),rgba(0,198,255,0.1));border-bottom:1px solid rgba(0,198,255,0.2);font-size:11px;color:var(--text);flex-shrink:0;position:relative;z-index:10}
+#install-btn{background:linear-gradient(135deg,var(--accent2),var(--accent));color:white;border:none;font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer;padding:7px 16px;border-radius:20px;white-space:nowrap}
+#dismiss-banner{background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;padding:2px 6px}
+
+/* FAB */
+#fab-wrap{position:fixed;bottom:calc(80px + var(--safe-bottom));right:16px;z-index:200;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.fab-menu{display:none;flex-direction:column;align-items:flex-end;gap:8px;animation:fabIn 0.18s ease}
+.fab-menu.open{display:flex}
+@keyframes fabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fab-option{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border2);border-radius:24px;color:var(--text);font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;padding:10px 16px 10px 12px;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.4);transition:all 0.15s}
+.fab-option:active{background:rgba(0,198,255,0.1);border-color:var(--accent);color:var(--accent)}
+.fab-option-icon{font-size:18px}
+.fab-btn{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;color:white;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,198,255,0.4);transition:all 0.2s;position:relative}
+.fab-btn::before{content:'';position:absolute;inset:-3px;border-radius:21px;border:1.5px solid rgba(0,198,255,0.3);animation:fabPulse 2s ease-out infinite}
+@keyframes fabPulse{0%{opacity:0.6;transform:scale(1)}100%{opacity:0;transform:scale(1.4)}}
+.fab-btn:active{transform:scale(0.92)}
+.fab-btn.open-state{background:linear-gradient(135deg,#ff4057,#ff6d00);box-shadow:0 4px 20px rgba(255,64,87,0.4)}
+
+/* CAPTURE MODAL */
+#capture-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:300;align-items:flex-end;justify-content:center;backdrop-filter:blur(8px)}
+#capture-modal.open{display:flex}
+.capture-sheet{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:560px;padding:0 0 calc(20px + var(--safe-bottom));animation:sheetUp 0.28s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:40px;height:4px;border-radius:2px;background:var(--surface3);margin:12px auto 16px}
+.sheet-header{display:flex;align-items:center;justify-content:space-between;padding:0 18px 14px;border-bottom:1px solid var(--border)}
+.sheet-title{font-size:16px;font-weight:700;color:var(--white)}
+.sheet-close{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:none;color:var(--text2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cap-body{padding:16px 18px}
+.drop-zone{border:2px dashed var(--border2);border-radius:16px;padding:30px 20px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:14px;background:var(--bg2)}
+.drop-zone.drag-over{border-color:var(--accent);background:rgba(0,198,255,0.05);box-shadow:0 0 0 4px rgba(0,198,255,0.08)}
+.drop-icon{font-size:38px;margin-bottom:10px;display:block}
+.drop-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.drop-sub{font-size:11px;color:var(--text3)}
+.cap-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.cap-btn{background:var(--bg2);border:1.5px solid var(--border2);border-radius:14px;padding:14px 8px;cursor:pointer;font-family:var(--font);display:flex;flex-direction:column;align-items:center;gap:7px;transition:all 0.15s;color:var(--text2)}
+.cap-btn:active{border-color:var(--accent);background:rgba(0,198,255,0.06);color:var(--accent)}
+.cap-btn-icon{font-size:24px}
+.cap-btn-label{font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase}
+.cap-preview-strip{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.cap-thumb{position:relative;width:72px;height:56px;border-radius:10px;overflow:hidden;border:2px solid var(--accent)}
+.cap-thumb img{width:100%;height:100%;object-fit:cover}
+.cap-thumb-rm{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,0.8);color:white;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center}
+.cap-prompt-wrap{display:none;gap:8px}
+.cap-prompt-wrap.show{display:flex}
+.cap-prompt-input{flex:1;background:var(--bg2);border:1.5px solid var(--border2);border-radius:12px;color:var(--text);font-family:var(--font);font-size:13px;padding:11px 13px;outline:none;transition:border-color 0.15s,box-shadow 0.15s}
+.cap-prompt-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,198,255,0.1)}
+.cap-analyze-btn{background:linear-gradient(135deg,var(--accent2),var(--accent));color:white;border:none;border-radius:12px;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;padding:11px 18px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,198,255,0.3);transition:all 0.15s}
+.cap-analyze-btn:disabled{background:var(--surface3);box-shadow:none;cursor:not-allowed}
+.cap-analyze-btn:active{transform:scale(0.95)}
+
+/* TOASTS */
+.toast{display:none;position:fixed;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:24px;font-size:12px;font-weight:600;z-index:400;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+#offline-toast{background:rgba(255,64,87,0.92);color:white;top:calc(70px + var(--safe-top))}
+#paste-toast{background:rgba(0,198,255,0.92);color:#060a12;bottom:calc(100px + var(--safe-bottom))}
+</style>
+</head>
+<body>
+
+<div id="install-banner">
+  <div style="display:flex;align-items:center;gap:8px"><span>📲</span><span>Add NQ Mentor to your home screen</span></div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button id="install-btn">Install</button>
+    <button id="dismiss-banner">✕</button>
+  </div>
+</div>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark"><span>NQ</span></div>
+    <div>
+      <div class="logo-name">NQ Mentor</div>
+      <div class="logo-sub">ICT · NQ/MNQ Futures</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div id="session-pill" class="session-pill closed">
+      <div class="session-dot"></div>
+      <span id="session-label">Closed</span>
+    </div>
+    <div class="et-time" id="et-clock">--:--</div>
+  </div>
+
+  <button onclick="openSettings()" id="settings-btn" style="background:none;border:1px solid var(--border2);color:var(--text2);border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:var(--font)">⚙️ Key</button>
+</header>
+
+<div id="settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(8px)">
+  <div style="background:#0f1829;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:24px;width:90%;max-width:400px">
+    <div style="font-size:14px;font-weight:700;color:white;margin-bottom:6px">🔑 Anthropic API Key</div>
+    <div style="font-size:11px;color:#4d6080;margin-bottom:16px;line-height:1.5">Saved locally to your browser only. Never visible to anyone else.</div>
+    <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." style="width:100%;background:#0b1120;border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#e2eaf5;font-family:monospace;font-size:12px;padding:11px 13px;outline:none;margin-bottom:12px;box-sizing:border-box">
+    <div style="display:flex;gap:8px">
+      <button onclick="saveApiKey()" style="flex:1;padding:11px;background:linear-gradient(135deg,#0072ff,#00c6ff);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer">Save Key</button>
+      <button onclick="closeSettings()" style="padding:11px 16px;background:#162035;color:#8899b4;border:1px solid rgba(255,255,255,0.12);border-radius:10px;font-size:12px;cursor:pointer">Cancel</button>
+    </div>
+    <div id="key-status" style="font-size:11px;color:#00e676;margin-top:10px;text-align:center"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <div class="mode-tab active" id="tab-chat" onclick="setMode('chat')">
+    <span class="mode-tab-icon">💬</span><span class="mode-tab-label">Mentor</span>
+  </div>
+  <div class="mode-tab" id="tab-premarket" onclick="setMode('premarket')">
+    <span class="mode-tab-icon">🌅</span><span class="mode-tab-label">Pre-Mkt</span>
+  </div>
+  <div class="mode-tab" id="tab-live" onclick="setMode('live')">
+    <span class="mode-tab-icon">⚡</span><span class="mode-tab-label">Live</span>
+  </div>
+  <div class="mode-tab" id="tab-postmarket" onclick="setMode('postmarket')">
+    <span class="mode-tab-icon">📋</span><span class="mode-tab-label">Debrief</span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Market Context</div>
+      <div class="ctx-field"><label>Current Price</label><input type="number" id="ctx-price" placeholder="21450.25" step="0.25"></div>
+      <div class="ctx-field"><label>Prev Day Close (PDC)</label><input type="number" id="ctx-pdc" placeholder="21380.00" step="0.25"></div>
+      <div class="ctx-field"><label>Overnight High</label><input type="number" id="ctx-oh" placeholder="21500.00" step="0.25"></div>
+      <div class="ctx-field"><label>Overnight Low</label><input type="number" id="ctx-ol" placeholder="21320.00" step="0.25"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Bias</div>
+      <div class="bias-row">
+        <button class="bias-btn long" onclick="setBias('long')">▲ Long</button>
+        <button class="bias-btn flat" onclick="setBias('flat')">— Flat</button>
+        <button class="bias-btn short" onclick="setBias('short')">▼ Short</button>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Key Levels</div>
+      <div id="levels-list"></div>
+      <button class="add-level-btn" onclick="addLevel()">＋ Add Level</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Notes</div>
+      <div class="ctx-field"><textarea id="ctx-notes" placeholder="FOMC at 2pm, gap above 21500…"></textarea></div>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+    <div class="messages" id="messages">
+      <div class="msg mentor">
+        <div class="msg-avatar">AI</div>
+        <div class="msg-content">
+          <div class="msg-bubble">
+            <strong>NQ Mentor online.</strong><br><br>
+            Your ICT-based NQ/MNQ assistant is ready. I follow your model strictly:<br><br>
+            <span class="tag neutral">Sweep</span> → <span class="tag neutral">Acceptance</span> → <span class="tag neutral">FVG / OB</span> → <span class="tag bull">Displacement</span><br><br>
+            Kill zones: <strong>NY Open 9:30–10:00 ET</strong> and <strong>Mid-Morning 10:00–11:00 ET</strong> only.<br><br>
+            Fill in your levels, upload a chart via 📸, or ask me anything.
+          </div>
+          <div class="msg-time" id="welcome-time"></div>
+        </div>
+      </div>
+    </div>
+    <div class="input-area">
+      <div class="img-strip" id="img-strip"></div>
+      <div class="chips" id="chips"></div>
+      <div class="input-row">
+        <button class="img-btn" onclick="document.getElementById('img-input').click()">📷</button>
+        <input type="file" id="img-input" accept="image/*" multiple style="display:none" onchange="handleImages(event)">
+        <textarea id="user-input" placeholder="Describe what you see, or ask about a setup…" rows="1" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="offline-toast">⚡ Offline — AI unavailable</div>
+<div class="toast" id="paste-toast">✓ Chart pasted — ready to analyze</div>
+
+<div id="fab-wrap">
+  <div class="fab-menu" id="fab-menu">
+    <button class="fab-option" onclick="openCapture('camera')"><span class="fab-option-icon">📷</span> Camera</button>
+    <button class="fab-option" onclick="openCapture('paste')"><span class="fab-option-icon">📋</span> Paste Chart</button>
+    <button class="fab-option" onclick="openCapture('file')"><span class="fab-option-icon">🗂</span> Browse Files</button>
+  </div>
+  <button class="fab-btn" id="fab-btn" onclick="toggleFab()">📸</button>
+</div>
+
+<div id="capture-modal">
+  <div class="capture-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Quick Capture</div>
+      <button class="sheet-close" onclick="closeCaptureModal()">✕</button>
+    </div>
+    <div class="cap-body">
+      <div class="drop-zone" id="drop-zone" onclick="document.getElementById('cap-file-input').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave()" ondrop="handleDrop(event)">
+        <span class="drop-icon">📊</span>
+        <div class="drop-title">Drop your chart here</div>
+        <div class="drop-sub">Or choose a method below · PNG · JPG</div>
+      </div>
+      <div class="cap-actions">
+        <button class="cap-btn" onclick="openCamera()"><span class="cap-btn-icon">📷</span><span class="cap-btn-label">Camera</span></button>
+        <button class="cap-btn" onclick="pasteFromClipboard()"><span class="cap-btn-icon">📋</span><span class="cap-btn-label">Paste</span></button>
+        <button class="cap-btn" onclick="document.getElementById('cap-file-input').click()"><span class="cap-btn-icon">🗂</span><span class="cap-btn-label">Files</span></button>
+      </div>
+      <input type="file" id="cap-file-input" accept="image/*" multiple style="display:none" onchange="handleCapFiles(event)">
+      <input type="file" id="cap-cam-input" accept="image/*" capture="environment" style="display:none" onchange="handleCapFiles(event)">
+      <div class="cap-preview-strip" id="cap-preview-strip"></div>
+      <div class="cap-prompt-wrap" id="cap-prompt-wrap">
+        <input type="text" class="cap-prompt-input" id="cap-prompt" placeholder="Add context (optional)">
+        <button class="cap-analyze-btn" id="cap-analyze-btn" onclick="sendCapture()">Analyze →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// PWA MANIFEST
+const mf={name:"NQ Trading Mentor",short_name:"NQ Mentor",description:"ICT-based NQ/MNQ futures assistant",start_url:"./",display:"standalone",background_color:"#060a12",theme_color:"#060a12",orientation:"any",icons:[{src:"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#060a12"/><circle cx="256" cy="256" r="200" fill="none" stroke="#00c6ff" stroke-width="16"/><text x="256" y="300" font-family="monospace" font-size="160" font-weight="bold" fill="#00c6ff" text-anchor="middle">NQ</text></svg>'),sizes:"any",type:"image/svg+xml",purpose:"any maskable"}]};
+document.getElementById('manifest-link').href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/json'}));
+
+// SERVICE WORKER
+if('serviceWorker' in navigator){const sw=`const C='nq-v2';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.add(location.href)));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>n!==C).map(n=>caches.delete(n)))));self.clients.claim();});self.addEventListener('fetch',e=>{if(e.request.url.includes('netlify/functions')||e.request.url.includes('fonts.goog'))return;e.respondWith(caches.match(e.request).then(c=>c||fetch(e.request).catch(()=>c)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'text/javascript'})),{scope:'./'}).catch(()=>{});}
+
+// OFFLINE
+function updateOnline(){const t=document.getElementById('offline-toast');t.style.display=navigator.onLine?'none':'block';}
+window.addEventListener('online',updateOnline);window.addEventListener('offline',updateOnline);updateOnline();
+
+// INSTALL
+let dp=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;document.getElementById('install-banner').style.display='flex';});
+document.getElementById('install-btn').addEventListener('click',async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;document.getElementById('install-banner').style.display='none';});
+document.getElementById('dismiss-banner').addEventListener('click',()=>document.getElementById('install-banner').style.display='none');
+
+// STATE
+let currentMode='chat',bias='flat',pendingImages=[],conversation=[],levelCount=0,fabOpen=false,captureImages=[];
+
+// CLOCK
+function updateClock(){
+  const et=new Date(new Date().toLocaleString('en-US',{timeZone:'America/New_York'}));
+  const h=et.getHours(),m=et.getMinutes();
+  const pad=n=>String(n).padStart(2,'0');
+  const h12=h%12||12,ap=h>=12?'PM':'AM';
+  document.getElementById('et-clock').textContent=`${pad(h12)}:${pad(m)} ${ap}`;
+  const mins=h*60+m,wd=et.getDay()>=1&&et.getDay()<=5;
+  const pill=document.getElementById('session-pill'),lbl=document.getElementById('session-label');
+  if(!wd){lbl.textContent='Weekend';pill.className='session-pill closed';}
+  else if(mins>=9*60+30&&mins<10*60){lbl.textContent='NY Open 🔥';pill.className='session-pill active';}
+  else if(mins>=10*60&&mins<11*60){lbl.textContent='Mid-Morn ⚡';pill.className='session-pill active';}
+  else if(mins>=9*60&&mins<9*60+30){lbl.textContent='Pre-Open';pill.className='session-pill waiting';}
+  else{lbl.textContent='Closed';pill.className='session-pill closed';}
+}
+setInterval(updateClock,5000);updateClock();
+document.getElementById('welcome-time').textContent=new Date().toLocaleTimeString('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true})+' ET';
+
+// MODES
+const modeChips={
+  chat:['Is this setup valid?','Where is the FVG?','Sweep + rejection?','Check my bias','OB vs FVG?'],
+  premarket:['Build my game plan','Map dealing range','Find BSL/SSL','AMD framework','Bias for today'],
+  live:['Active setup?','Slow grind — skip?','FVG hit — enter?','Stop placement?','Displacement confirmed?'],
+  postmarket:['Full trade debrief','Power of 3 review','What did I miss?','Rate my execution','Journal this'],
+};
+function setMode(m){currentMode=m;document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab-'+m).classList.add('active');renderChips();}
+function renderChips(){document.getElementById('chips').innerHTML=(modeChips[currentMode]||[]).map(c=>`<button class="chip" onclick="useChip('${c}')">${c}</button>`).join('');}
+function useChip(t){document.getElementById('user-input').value=t;document.getElementById('user-input').focus();}
+renderChips();
+
+// SIDEBAR
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebar-overlay').classList.toggle('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('open');}
+
+// BIAS
+function setBias(b){bias=b;document.querySelectorAll('.bias-btn').forEach(btn=>btn.classList.remove('active'));document.querySelector('.bias-btn.'+b).classList.add('active');}
+setBias('flat');
+
+// LEVELS
+function addLevel(){const id=++levelCount;const d=document.createElement('div');d.className='level-row';d.id='lvl-'+id;d.innerHTML=`<select><option>Support</option><option>Resistance</option><option>PDH</option><option>PDL</option><option>OB</option><option>FVG</option><option>POI</option><option>EQ</option></select><input type="number" step="0.25" placeholder="Price"><button onclick="document.getElementById('lvl-${id}').remove()">✕</button>`;document.getElementById('levels-list').appendChild(d);}
+function getLevels(){return Array.from(document.querySelectorAll('#levels-list .level-row')).map(r=>{const t=r.querySelector('select').value,p=r.querySelector('input').value;return p?`${t}: ${p}`:null;}).filter(Boolean);}
+
+// IMAGES
+function readFile(file,cb){const r=new FileReader();r.onload=ev=>{const f=ev.target.result;cb({base64:f.split(',')[1],mimeType:file.type,previewUrl:f});};r.readAsDataURL(file);}
+function handleImages(e){Array.from(e.target.files).forEach(f=>readFile(f,img=>{pendingImages.push(img);renderPreviews();}));e.target.value='';}
+function renderPreviews(){document.getElementById('img-strip').innerHTML=pendingImages.map((img,i)=>`<div class="img-thumb"><img src="${img.previewUrl}"><button class="img-thumb-rm" onclick="pendingImages.splice(${i},1);renderPreviews()">✕</button></div>`).join('');}
+
+// SYSTEM PROMPT
+function buildSystem(){
+  const price=document.getElementById('ctx-price').value,pdc=document.getElementById('ctx-pdc').value,oh=document.getElementById('ctx-oh').value,ol=document.getElementById('ctx-ol').value,notes=document.getElementById('ctx-notes').value,levels=getLevels();
+  const etStr=new Date().toLocaleString('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true});
+  return `You are an expert NQ/MNQ futures trading mentor using ICT concepts. Concise, direct, decisive — like a seasoned prop trader in real time.
+
+TRADING MODEL (strict):
+- NQ/MNQ futures only. 5-min and 1-min charts.
+- Kill zones ONLY: NY Open 9:30–10:00 AM ET, Mid-Morning 10:00–11:00 AM ET.
+- Clean charts only: horizontal lines, boxes, time. No indicators.
+- 4-step setup (ALL required): (1) SWEEP a key liquidity level (BSL/SSL), (2) ACCEPTANCE — candle closes beyond, (3) RETRACE to FVG or OB, (4) DISPLACEMENT — strong impulsive move triggers entry.
+- Bullish: FVG/OB below price for longs. Bearish: FVG/OB above for shorts.
+- INVALID: slow grinds, outside kill zones, missing any step, no displacement.
+
+MODE: ${currentMode.toUpperCase()}
+${currentMode==='premarket'?'Focus: dealing range, premium/discount, AMD, bias, liquidity map, NY Open game plan.':''}${currentMode==='live'?'Focus: fast real-time validity. Decisive. Flag grinds. Confirm displacement. Check kill zone.':''}${currentMode==='postmarket'?'Focus: full debrief. Power of 3. Was model respected? Errors and lessons.':''}${currentMode==='chat'?'Focus: ICT education and setup validation.':''}
+
+CONTEXT: ET ${etStr} | Bias: ${bias.toUpperCase()}${price?` | Price: ${price}`:''}${pdc?` | PDC: ${pdc}`:''}${oh?` | ONH: ${oh}`:''}${ol?` | ONL: ${ol}`:''}${levels.length?`\nLevels: ${levels.join(', ')}`:''}${notes?`\nNotes: ${notes}`:''}
+
+STYLE: Direct. No fluff. ICT terms: Sweep, Acceptance, FVG, OB, Displacement, BSL, SSL, PDC, Dealing Range, Premium, Discount, Power of 3, AMD. Flag INVALID clearly. Concise, mobile-friendly.`;
+}
+
+// CHAT
+function getET(){return new Date().toLocaleTimeString('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true})+' ET';}
+function fmt(t){return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/`(.*?)`/g,'<code style="background:rgba(0,198,255,0.1);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--accent)">$1</code>').replace(/\n/g,'<br>');}
+
+function renderMessage(role,text,images=[]){
+  const msgs=document.getElementById('messages');
+  const d=document.createElement('div');d.className='msg '+role;
+  const av=role==='mentor'?'AI':'YOU';
+  const iH=images.map(i=>`<img class="msg-img" src="${i.previewUrl}">`).join('');
+  d.innerHTML=`<div class="msg-avatar">${av}</div><div class="msg-content"><div class="msg-bubble">${iH}${fmt(text)}</div><div class="msg-time">${getET()}</div></div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(analyzing){
+  const msgs=document.getElementById('messages');
+  const d=document.createElement('div');d.className='msg mentor';d.id='typing';
+  d.innerHTML=`<div class="msg-avatar">AI</div><div class="msg-content"><div class="msg-bubble">${analyzing?'<div class="analyzing-label">Analyzing chart…</div>':''}<div class="typing-bubble"><span></span><span></span><span></span></div></div></div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+function removeTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+
+async function sendMessage(){
+  const input=document.getElementById('user-input'),btn=document.getElementById('send-btn');
+  const text=input.value.trim(),imgs=[...pendingImages];
+  if(!text&&imgs.length===0)return;
+  input.value='';input.style.height='';pendingImages=[];renderPreviews();
+  btn.disabled=true;
+  if(window.innerWidth<=700)closeSidebar();
+  renderMessage('user',text||`[${imgs.length} chart${imgs.length>1?'s':''} for ICT analysis]`,imgs);
+  showTyping(imgs.length>0);
+  let content;
+  if(imgs.length>0){content=imgs.map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}}));content.push({type:'text',text:text||`Analyze this chart with my ICT model: (1) market structure & swings, (2) liquidity sweeps BSL/SSL, (3) OBs & FVGs, (4) dealing range premium/discount, (5) 4-step setup validity Sweep→Acceptance→FVG/OB→Displacement, (6) actionable entry if valid. Mode: ${currentMode}.`});}
+  else{content=text;}
+  conversation.push({role:'user',content});
+  try{
+    const res=await fetch('https://corsproxy.io/?url=https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_KEY,'anthropic-version':'2023-06-01','x-requested-with':'XMLHttpRequest'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildSystem(),messages:conversation})});
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'No response.';
+    removeTyping();renderMessage('mentor',reply);conversation.push({role:'assistant',content:reply});
+  }catch{removeTyping();renderMessage('mentor',`⚠️ Connection error. ${navigator.onLine?'Please try again.':'You are offline.'}`);}
+  btn.disabled=false;
+}
+
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+document.getElementById('user-input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}});
+
+// FAB
+function toggleFab(){fabOpen=!fabOpen;document.getElementById('fab-menu').classList.toggle('open',fabOpen);const btn=document.getElementById('fab-btn');btn.textContent=fabOpen?'✕':'📸';btn.classList.toggle('open-state',fabOpen);}
+function openCapture(mode){fabOpen=false;document.getElementById('fab-menu').classList.remove('open');const btn=document.getElementById('fab-btn');btn.textContent='📸';btn.classList.remove('open-state');captureImages=[];renderCapPreviews();document.getElementById('cap-prompt').value='';document.getElementById('cap-prompt-wrap').classList.remove('show');document.getElementById('capture-modal').classList.add('open');if(mode==='camera')setTimeout(openCamera,150);if(mode==='paste')setTimeout(pasteFromClipboard,150);if(mode==='file')setTimeout(()=>document.getElementById('cap-file-input').click(),150);}
+function closeCaptureModal(){document.getElementById('capture-modal').classList.remove('open');captureImages=[];renderCapPreviews();}
+document.getElementById('capture-modal').addEventListener('click',e=>{if(e.target===document.getElementById('capture-modal'))closeCaptureModal();});
+document.addEventListener('click',e=>{if(fabOpen&&!document.getElementById('fab-wrap').contains(e.target)){fabOpen=false;document.getElementById('fab-menu').classList.remove('open');const btn=document.getElementById('fab-btn');btn.textContent='📸';btn.classList.remove('open-state');}});
+
+// CAPTURE
+function openCamera(){document.getElementById('cap-cam-input').click();}
+async function pasteFromClipboard(){try{const items=await navigator.clipboard.read();let found=false;for(const item of items)for(const type of item.types)if(type.startsWith('image/')){readFile(await item.getType(type),img=>{captureImages.push(img);renderCapPreviews();showCapPrompt();showToast('paste');});found=true;}if(!found)alert('No image in clipboard. Screenshot first.');}catch{alert('Tap and hold → Paste, or Ctrl+V on desktop.');}}
+
+document.addEventListener('paste',e=>{for(const item of(e.clipboardData?.items||[])){if(item.type.startsWith('image/')){readFile(item.getAsFile(),img=>{const inModal=document.getElementById('capture-modal').classList.contains('open');if(inModal){captureImages.push(img);renderCapPreviews();showCapPrompt();}else{pendingImages.push(img);renderPreviews();}showToast('paste');});}}});
+
+function handleCapFiles(e){Array.from(e.target.files).forEach(f=>readFile(f,img=>{captureImages.push(img);renderCapPreviews();showCapPrompt();}));e.target.value='';}
+function handleDragOver(e){e.preventDefault();document.getElementById('drop-zone').classList.add('drag-over');}
+function handleDragLeave(){document.getElementById('drop-zone').classList.remove('drag-over');}
+function handleDrop(e){e.preventDefault();document.getElementById('drop-zone').classList.remove('drag-over');Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')).forEach(f=>readFile(f,img=>{captureImages.push(img);renderCapPreviews();showCapPrompt();}));}
+function renderCapPreviews(){document.getElementById('cap-preview-strip').innerHTML=captureImages.map((img,i)=>`<div class="cap-thumb"><img src="${img.previewUrl}"><button class="cap-thumb-rm" onclick="captureImages.splice(${i},1);renderCapPreviews();if(!captureImages.length)document.getElementById('cap-prompt-wrap').classList.remove('show')">✕</button></div>`).join('');}
+function showCapPrompt(){document.getElementById('cap-prompt-wrap').classList.add('show');setTimeout(()=>document.getElementById('cap-prompt').focus(),100);}
+async function sendCapture(){if(!captureImages.length)return;const prompt=document.getElementById('cap-prompt').value.trim(),btn=document.getElementById('cap-analyze-btn');btn.disabled=true;btn.textContent='…';pendingImages=[...captureImages];closeCaptureModal();document.getElementById('user-input').value=prompt;await sendMessage();btn.disabled=false;btn.textContent='Analyze →';}
+function showToast(type){const t=document.getElementById(type==='paste'?'paste-toast':'offline-toast');t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
+
+// ── API KEY SETTINGS ──────────────────────────────────────────────────────
+let ANTHROPIC_KEY = localStorage.getItem('nq-api-key') || '';
+
+function openSettings() {
+  const modal = document.getElementById('settings-modal');
+  modal.style.display = 'flex';
+  const input = document.getElementById('api-key-input');
+  if (ANTHROPIC_KEY) input.value = ANTHROPIC_KEY;
+  input.focus();
+  document.getElementById('key-status').textContent = ANTHROPIC_KEY ? '✓ Key saved' : '';
+}
+
+function closeSettings() {
+  document.getElementById('settings-modal').style.display = 'none';
+}
+
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key.startsWith('sk-ant-')) {
+    document.getElementById('key-status').textContent = '⚠️ Key should start with sk-ant-';
+    document.getElementById('key-status').style.color = '#ff4057';
+    return;
+  }
+  ANTHROPIC_KEY = key;
+  localStorage.setItem('nq-api-key', key);
+  document.getElementById('key-status').textContent = '✅ Key saved!';
+  document.getElementById('key-status').style.color = '#00e676';
+  updateKeyBtn();
+  setTimeout(closeSettings, 1000);
+}
+
+function updateKeyBtn() {
+  const btn = document.getElementById('settings-btn');
+  if (btn) btn.textContent = ANTHROPIC_KEY ? '✅ Key' : '⚙️ Key';
+}
+
+// Check key on load
+if (!ANTHROPIC_KEY) {
+  setTimeout(() => openSettings(), 800);
+} else {
+  updateKeyBtn();
+}
+
+document.getElementById('settings-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('settings-modal')) closeSettings();
+});
+
+</script>
+</body>
+</html>
