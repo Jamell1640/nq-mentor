@@ -6,9 +6,9 @@
 <title>NQ Card</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap');
-
+ 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-
+ 
 :root{
   --bg:#f5f5f7;
   --card:#ffffff;
@@ -29,7 +29,7 @@
   --shadow:0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
   --shadow-md:0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
 }
-
+ 
 body{
   background:var(--bg);
   color:var(--text);
@@ -39,7 +39,7 @@ body{
   margin:0 auto;
   min-height:100vh;
 }
-
+ 
 /* ── HEADER ── */
 .header{
   display:flex;
@@ -70,7 +70,7 @@ body{
   padding:6px 10px;
   box-shadow:var(--shadow);
 }
-
+ 
 /* ── KZ PILL ── */
 .kz{
   text-align:center;
@@ -88,7 +88,7 @@ body{
 }
 .kz.on{background:var(--green-bg);border-color:#a8e6bc;color:var(--green)}
 .kz.near{background:#e8f4ff;border-color:#b8d8f5;color:var(--blue)}
-
+ 
 /* ── GATES ── */
 .gates{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .gate-btn{
@@ -109,7 +109,7 @@ body{
 .gate-btn:active{transform:scale(0.97)}
 .gate-btn.ok{background:var(--green-light);border-color:#a8e6bc;color:var(--green)}
 .gate-btn.bad{background:var(--red-light);border-color:#f5b8b4;color:var(--red)}
-
+ 
 /* ── TIER CARDS ── */
 .tier-card{
   background:var(--card);
@@ -124,7 +124,7 @@ body{
 .tier-card.active-bear{border-color:#f5b8b4;background:var(--red-light)}
 .tier-card.active-half-bull{border-color:#f5d98a;background:var(--amber-light)}
 .tier-card.active-half-bear{border-color:#f5c88a;background:#fff8f0}
-
+ 
 /* tier header row */
 .tier-main{
   display:grid;
@@ -136,7 +136,7 @@ body{
   user-select:none;
 }
 .tier-main:active{opacity:0.8}
-
+ 
 /* checkbox */
 .chk{
   width:24px;height:24px;
@@ -152,12 +152,12 @@ body{
 .chk.checked-bear{background:var(--red);border-color:var(--red);color:#fff}
 .chk.checked-half-bull{background:#d97706;border-color:#d97706;color:#fff}
 .chk.checked-half-bear{background:#c2660a;border-color:#c2660a;color:#fff}
-
+ 
 /* tier info */
 .tier-info{}
 .tier-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
 .tier-rule{font-size:11px;color:var(--sub);line-height:1.5}
-
+ 
 /* badge */
 .tier-badge{
   padding:4px 8px;
@@ -172,7 +172,7 @@ body{
 .badge-half-bull{background:var(--amber-bg);color:var(--amber)}
 .badge-half-bear{background:#fde8d0;color:#b45309}
 .badge-off{background:#f5f5f7;color:var(--dim)}
-
+ 
 /* ── DROPDOWN ── */
 .tier-dropdown{
   display:none;
@@ -185,7 +185,7 @@ body{
 .tier-card.active-bear .tier-dropdown{background:var(--red-light);border-color:#f9cbc8}
 .tier-card.active-half-bull .tier-dropdown{background:var(--amber-light);border-color:#f5e0a0}
 .tier-card.active-half-bear .tier-dropdown{background:#fff8f0;border-color:#f5d0a0}
-
+ 
 .dd-row{
   display:flex;
   justify-content:space-between;
@@ -200,7 +200,7 @@ body{
 .dd-val.green{color:var(--green)}
 .dd-val.red{color:var(--red)}
 .dd-val.amber{color:var(--amber)}
-
+ 
 /* chevron */
 .chevron{
   font-size:16px;
@@ -213,7 +213,7 @@ body{
 }
 .chevron:hover{background:#f0f0f2}
 .chevron.open{transform:rotate(180deg)}
-
+ 
 /* ── SIGNAL BOX ── */
 .signal{
   border-radius:14px;
@@ -235,7 +235,7 @@ body{
 .signal.s-bear{background:var(--red-light);border-color:#f5b8b4}
 .signal.s-half{background:var(--amber-light);border-color:#f5d98a}
 .signal.s-gate{background:#fff8f0;border-color:#f5c88a}
-
+ 
 .sig-main{font-size:18px;font-weight:700;letter-spacing:-0.01em}
 .sig-main.g{color:var(--green)}
 .sig-main.r{color:var(--red)}
@@ -243,7 +243,7 @@ body{
 .sig-main.o{color:#b45309}
 .sig-main.d{color:var(--dim)}
 .sig-sub{font-size:12px;color:var(--sub);font-weight:400}
-
+ 
 /* ── TABS ── */
 .tab-nav{
   display:grid;grid-template-columns:1fr 1fr;
@@ -258,7 +258,7 @@ body{
 }
 .tab-btn.active{background:var(--card);color:var(--text);box-shadow:var(--shadow)}
 .tab-btn:hover:not(.active){color:var(--text)}
-
+ 
 /* ── LOG FORM ── */
 .log-form{
   background:var(--card);border:1.5px solid var(--border);
@@ -288,7 +288,7 @@ body{
   cursor:pointer;transition:opacity 0.15s;letter-spacing:0.01em;
 }
 .log-save-btn:hover{opacity:0.85}
-
+ 
 /* ── STATS STRIP ── */
 .log-stats{
   display:grid;grid-template-columns:repeat(4,1fr);
@@ -301,7 +301,7 @@ body{
 }
 .stat-label{font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
 .stat-val{font-size:16px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace}
-
+ 
 /* ── LOG ENTRIES ── */
 .log-entry{
   background:var(--card);border:1.5px solid var(--border);
@@ -335,8 +335,8 @@ body{
 .no-trades{
   text-align:center;padding:32px 16px;color:var(--dim);font-size:13px;
 }
-
-
+ 
+ 
 .reset{
   width:100%;padding:11px;
   background:var(--card);
@@ -355,7 +355,7 @@ body{
 </style>
 </head>
 <body>
-
+ 
 <!-- HEADER -->
 <div class="header">
   <div class="header-left">
@@ -364,23 +364,23 @@ body{
   </div>
   <div class="clock" id="clock">--:--:--</div>
 </div>
-
+ 
 <!-- TABS -->
 <div class="tab-nav">
   <button class="tab-btn active" id="tab-card" onclick="switchTab('card')">Trading Card</button>
   <button class="tab-btn" id="tab-log" onclick="switchTab('log')">Trade Log</button>
 </div>
-
+ 
 <!-- TAB: TRADING CARD -->
 <div id="panel-card">
 <div class="kz" id="kz">Loading...</div>
-
+ 
 <!-- GATES -->
 <div class="gates">
   <div class="gate-btn ok" id="g-sep" onclick="toggleGate('sep')">✓ Not September</div>
   <div class="gate-btn ok" id="g-jun" onclick="toggleGate('jun')">✓ Not June</div>
 </div>
-
+ 
 <!-- TIER 1 -->
 <div class="tier-card" id="card1">
   <div class="tier-main">
@@ -401,9 +401,17 @@ body{
     <div class="dd-row"><span class="dd-label">Size</span><span class="dd-val green">Full position</span></div>
     <div class="dd-row"><span class="dd-label">Gate</span><span class="dd-val">Not September</span></div>
     <div class="dd-row"><span class="dd-label">Required</span><span class="dd-val">BU2 ★ + BU5 ★</span></div>
+    <div style="margin-top:8px;padding:8px 10px;background:#fff8f0;border-radius:7px;border:1px solid #f5c88a">
+      <div style="font-size:9px;font-weight:700;color:#b45309;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px">⚠ Re-entry Rules</div>
+      <div style="font-size:10px;color:#333;line-height:1.6">
+        <b>✓ Re-entry:</b> Retrace forms bearish FVG → bullish CISD closes back through it → displacement confirms → enter long<br>
+        <b>✗ Invalidated:</b> Bearish CHoCH + FVG forms at 11am close → price retests FVG from below → rejected → bias dead (66% no recovery)<br>
+        <b>✗ Invalidated:</b> 5-min candle closes below PDH
+      </div>
+    </div>
   </div>
 </div>
-
+ 
 <!-- TIER 2 -->
 <div class="tier-card" id="card2">
   <div class="tier-main">
@@ -424,9 +432,17 @@ body{
     <div class="dd-row"><span class="dd-label">Size</span><span class="dd-val red">Full position</span></div>
     <div class="dd-row"><span class="dd-label">Gate</span><span class="dd-val">Not September</span></div>
     <div class="dd-row"><span class="dd-label">Required</span><span class="dd-val">BD2 ★ + BD5 ★</span></div>
+    <div style="margin-top:8px;padding:8px 10px;background:#fff8f0;border-radius:7px;border:1px solid #f5c88a">
+      <div style="font-size:9px;font-weight:700;color:#b45309;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px">⚠ Re-entry Rules</div>
+      <div style="font-size:10px;color:#333;line-height:1.6">
+        <b>✓ Re-entry:</b> Retrace forms bullish FVG → bearish CISD closes back through it → displacement confirms → enter short<br>
+        <b>✗ Invalidated:</b> Bullish CHoCH + FVG forms at 11am close → price retests FVG from above → rejected → bias dead (66% no recovery)<br>
+        <b>✗ Invalidated:</b> 5-min candle closes above PDL
+      </div>
+    </div>
   </div>
 </div>
-
+ 
 <!-- TIER 3 -->
 <div class="tier-card" id="card3">
   <div class="tier-main">
@@ -449,7 +465,7 @@ body{
     <div class="dd-row"><span class="dd-label">Signal time</span><span class="dd-val">8:00 AM ET</span></div>
   </div>
 </div>
-
+ 
 <!-- TIER 4 -->
 <div class="tier-card" id="card4">
   <div class="tier-main">
@@ -472,7 +488,7 @@ body{
     <div class="dd-row"><span class="dd-label">Signal time</span><span class="dd-val">8:00 AM ET</span></div>
   </div>
 </div>
-
+ 
 <!-- TIER 5 -->
 <div class="tier-card" id="card5">
   <div class="tier-main">
@@ -495,7 +511,7 @@ body{
     <div class="dd-row"><span class="dd-label">Note</span><span class="dd-val">PDH not broken</span></div>
   </div>
 </div>
-
+ 
 <!-- TIER 6 -->
 <div class="tier-card" id="card6">
   <div class="tier-main">
@@ -518,7 +534,7 @@ body{
     <div class="dd-row"><span class="dd-label">Note</span><span class="dd-val">PDL not broken</span></div>
   </div>
 </div>
-
+ 
 <!-- TIER 7 -->
 <div class="tier-card" id="card7">
   <div class="tier-main">
@@ -542,7 +558,7 @@ body{
     <div class="dd-row"><span class="dd-label">Required</span><span class="dd-val">Lon wick PDH + BD5 + score 3+</span></div>
   </div>
 </div>
-
+ 
 <!-- TIER 8 -->
 <div class="tier-card" id="card8">
   <div class="tier-main">
@@ -566,25 +582,25 @@ body{
     <div class="dd-row"><span class="dd-label">Required</span><span class="dd-val">Lon wick PDL + BU5 + score 3+</span></div>
   </div>
 </div>
-
+ 
 <!-- SIGNAL -->
 <div class="signal" id="sig" style="margin-top:14px">
   <div class="sig-main d" id="sig-main">No signal</div>
   <div class="sig-sub" id="sig-sub">Check tiers at 8:00 AM and 11:00 ET</div>
 </div>
-
+ 
 <!-- RESET -->
 <button class="reset" onclick="resetAll()">↺ &nbsp; Reset for new day</button>
-
+ 
 </div><!-- /panel-card -->
-
+ 
 <!-- TAB: TRADE LOG -->
 <div id="panel-log" style="display:none">
-
+ 
   <!-- LOG FORM -->
   <div class="log-form">
     <div class="log-form-title">Log a Trade</div>
-
+ 
     <div class="log-row2">
       <div class="log-field">
         <div class="log-label">Date</div>
@@ -605,7 +621,7 @@ body{
         </select>
       </div>
     </div>
-
+ 
     <div class="log-row3">
       <div class="log-field">
         <div class="log-label">Entry</div>
@@ -620,7 +636,7 @@ body{
         <input class="log-input" id="log-cts" type="number" placeholder="1" inputmode="decimal">
       </div>
     </div>
-
+ 
     <div class="log-row2">
       <div class="log-field">
         <div class="log-label">Direction</div>
@@ -640,15 +656,15 @@ body{
         </select>
       </div>
     </div>
-
+ 
     <div class="log-field" style="margin-bottom:10px">
       <div class="log-label">Notes</div>
       <textarea class="log-input log-notes" id="log-notes" placeholder="Entry reason, what you saw, lessons learned..."></textarea>
     </div>
-
+ 
     <button class="log-save-btn" onclick="saveLog()">+ Save Trade</button>
   </div>
-
+ 
   <!-- STATS STRIP -->
   <div class="log-stats" id="log-stats" style="display:none">
     <div class="stat-cell">
@@ -668,17 +684,17 @@ body{
       <div class="stat-val" id="stat-best">—</div>
     </div>
   </div>
-
+ 
   <!-- TRADE ENTRIES -->
   <div id="log-entries"></div>
-
+ 
 </div><!-- /panel-log -->
-
+ 
 <script>
 var state = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0};
 var open  = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0};
 var gates = {sep:true, jun:true};
-
+ 
 var cfg = {
   1:{type:'bull',     label:'TIER 1 — FULL BULL',      sub:'90.2% WR · Full size long',  badge:'LONG',    chkCls:'checked-bull',      cardCls:'active-bull',      badgeCls:'badge-bull',      sigCls:'s-bull', mainCls:'g'},
   2:{type:'bear',     label:'TIER 2 — FULL BEAR',      sub:'87.3% WR · Full size short', badge:'SHORT',   chkCls:'checked-bear',      cardCls:'active-bear',      badgeCls:'badge-bear',      sigCls:'s-bear', mainCls:'r'},
@@ -689,7 +705,7 @@ var cfg = {
   7:{type:'halfbear', label:'TIER 7 — FAILED T3 BEAR', sub:'92.3% WR · Half size short', badge:'½ SHORT', chkCls:'checked-half-bear', cardCls:'active-half-bear', badgeCls:'badge-half-bear', sigCls:'s-half', mainCls:'o'},
   8:{type:'halfbull', label:'TIER 8 — FAILED T4 BULL', sub:'88.9% WR · Half size long',  badge:'½ LONG',  chkCls:'checked-half-bull', cardCls:'active-half-bull', badgeCls:'badge-half-bull', sigCls:'s-half', mainCls:'a'},
 };
-
+ 
 // Checkbox only — does NOT touch dropdown
 function checkTier(n) {
   state[n] = state[n] ? 0 : 1;
@@ -710,7 +726,7 @@ function checkTier(n) {
   }
   render();
 }
-
+ 
 // Chevron only — does NOT touch checkbox
 function toggleDD(n) {
   open[n] = open[n] ? 0 : 1;
@@ -719,7 +735,7 @@ function toggleDD(n) {
   dd.className   = open[n] ? 'tier-dropdown open' : 'tier-dropdown';
   chev.className = open[n] ? 'chevron open'        : 'chevron';
 }
-
+ 
 function toggleGate(g) {
   gates[g] = !gates[g];
   var el = document.getElementById('g-'+g);
@@ -732,7 +748,7 @@ function toggleGate(g) {
   }
   render();
 }
-
+ 
 function render() {
   if (!gates.sep) {
     set('⛔  September — No Trade', 'All tiers gated this month', 's-gate', 'o');
@@ -756,7 +772,7 @@ function render() {
   var c = cfg[active];
   set(c.label, c.sub, c.sigCls, c.mainCls);
 }
-
+ 
 function set(main, sub, sigCls, mainCls) {
   var sig  = document.getElementById('sig');
   var sm   = document.getElementById('sig-main');
@@ -766,7 +782,7 @@ function set(main, sub, sigCls, mainCls) {
   sm.textContent = main;
   ss.textContent = sub;
 }
-
+ 
 // Clock + KZ
 function tick() {
   var et   = new Date(new Date().toLocaleString('en-US',{timeZone:'America/New_York'}));
@@ -786,7 +802,7 @@ function tick() {
   }
 }
 setInterval(tick,1000); tick();
-
+ 
 function resetAll() {
   for (var i=1;i<=8;i++){
     state[i]=0; open[i]=0;
@@ -804,7 +820,7 @@ function resetAll() {
   document.getElementById('g-jun').className='gate-btn ok';
   render();
 }
-
+ 
 // ── TABS ──
 function switchTab(tab) {
   document.getElementById('panel-card').style.display = tab==='card' ? 'block' : 'none';
@@ -813,7 +829,7 @@ function switchTab(tab) {
   document.getElementById('tab-log').className  = 'tab-btn' + (tab==='log'  ? ' active' : '');
   if (tab==='log') renderLog();
 }
-
+ 
 // ── TRADE LOG ──
 function getLog() {
   try { return JSON.parse(localStorage.getItem('nq_trade_log')||'[]'); } catch(e){ return []; }
@@ -885,7 +901,7 @@ function renderLog() {
   }).join('');
 }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
+ 
 // Set today's date
 document.addEventListener('DOMContentLoaded',function(){
   var et=new Date(new Date().toLocaleString('en-US',{timeZone:'America/New_York'}));
@@ -893,7 +909,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var df=document.getElementById('log-date');
   if(df) df.value=y+'-'+m+'-'+d;
 });
-
+ 
 render();
 </script>
 </body>
